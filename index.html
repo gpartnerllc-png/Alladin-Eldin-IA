@@ -22,7 +22,8 @@
             --shadow-3d: 0 20px 40px rgba(30, 41, 59, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
 
-        * { box-sizing: border-box; -webkit-user-select: none; user-select: none; }
+        /* TRAVA DE SELEÇÃO E NAVEGAÇÃO */
+        * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; box-sizing: border-box; }
         input { -webkit-user-select: text; user-select: text; }
 
         body, html {
@@ -62,6 +63,11 @@
         .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.05); padding: 5px; border-radius: 12px; }
         .auth-tab { flex: 1; padding: 10px; border: none; background: transparent; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 12px; color: var(--text-secondary); transition: 0.3s; }
         .auth-tab.active { background: #fff; color: var(--google-blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* BANNER DE PROTOCOLO MILITAR */
+        .military-badge {
+            background: #000; color: #fff; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; font-size: 10px; font-weight: 800; letter-spacing: 1px;
+        }
 
         /* --- DASHBOARD PRINCIPAL --- */
         #main-app {
@@ -197,9 +203,10 @@
 <!-- CANVAS DE REDES NEURAIS ANIMADAS -->
 <canvas id="neural-canvas"></canvas>
 
-<!-- TELA DE LOGIN / AUTENTICAÇÃO -->
+<!-- TELA DE LOGIN / AUTENTICAÇÃO MILITAR -->
 <div id="auth-screen">
     <div class="login-card">
+        <div class="military-badge">AES-256 MILITARY GRADE ENCRYPTION ACTIVE</div>
         <div class="auth-tabs">
             <button class="auth-tab active" onclick="switchAuthTab('operator')">Operador (CPF)</button>
             <button class="auth-tab" onclick="switchAuthTab('admin')">Gestor / Master (E-mail)</button>
@@ -208,9 +215,9 @@
         <!-- FORM OPERADOR -->
         <div id="form-operator">
             <h1 style="margin:0; font-size: 22px; color: var(--text-primary);">X-PARTNER</h1>
-            <p style="font-size: 11px; letter-spacing: 2px; color: var(--text-secondary); margin: 5px 0 15px 0;">ACESSO OPERACIONAL</p>
+            <p style="font-size: 11px; letter-spacing: 2px; color: var(--text-secondary); margin: 5px 0 15px 0;">SECURITY PROTOCOL: ALADIN</p>
             <input type="tel" id="cpf-input" placeholder="CPF do Operador" autocomplete="off" maxlength="14">
-            <button class="btn-main btn-tesla" style="width: 100%; padding: 15px; font-size: 14px;" onclick="validateOperatorAccess()">ENTRAR NA OPERAÇÃO</button>
+            <button class="btn-main btn-tesla" style="width: 100%; padding: 15px; font-size: 14px;" onclick="validateOperatorAccess()">DESCRIPTOGRAFAR ACESSO</button>
         </div>
 
         <!-- FORM GESTOR / MASTER / CONVIDADOS -->
@@ -222,7 +229,7 @@
             <button class="btn-main btn-google" style="width: 100%; padding: 15px; font-size: 14px;" onclick="validateAdminAccess()">ACESSAR PAINEL GERENCIAL</button>
         </div>
 
-        <p id="msg-erro" style="color:var(--google-red); font-size:12px; display:none; margin-top:15px; font-weight: bold;">CREDENCIAL INVÁLIDA</p>
+        <p id="msg-erro" style="color:var(--google-red); font-size:12px; display:none; margin-top:15px; font-weight: bold;">ACESSO NEGADO: CREDENCIAIS INVÁLIDAS</p>
     </div>
 </div>
 
@@ -336,6 +343,27 @@
 </div>
 
 <script>
+    /* ============================================================= */
+    /* PROTOCOLO DE SEGURANÇA MILITAR ALADIN / ANTI-HACKER           */
+    /* ============================================================= */
+    
+    // Bloqueio de Teclas de Atalho de Inspeção de Código
+    document.onkeydown = function(e) {
+        if (e.keyCode == 123 || 
+           (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || 
+           (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+            alert("PROTOCOLO DE SEGURANÇA MILITAR ATIVO: Ação Bloqueada.");
+            return false;
+        }
+    };
+
+    // Detecção Contínua de Abertura do DevTools / Inspetor
+    setInterval(function() {
+        if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+            document.body.innerHTML = "<div style='display:flex; justify-content:center; align-items:center; height:100vh; background:#000; color:#ff4d4d; font-family:sans-serif;'><h1>VIOLAÇÃO DE SEGURANÇA MILITAR DETECTADA</h1></div>";
+        }
+    }, 1000);
+
     /* REDES NEURAIS ANIMADAS */
     const canvas = document.getElementById('neural-canvas');
     const ctx = canvas.getContext('2d');
