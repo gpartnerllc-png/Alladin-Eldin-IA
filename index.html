@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-PARTNER | Enterprise Command & Military Security OS</title>
+    <title>X-PARTNER | Enterprise Command & Security OS</title>
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency-systems-filled/48/FF8C00/security-configuration.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -22,7 +22,6 @@
             --shadow-3d: 0 20px 40px rgba(30, 41, 59, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
 
-        /* TRAVAS DE SELEÇÃO E NAVEGAÇÃO RIGOROSAS */
         * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; box-sizing: border-box; }
         input { -webkit-user-select: text; user-select: text; }
 
@@ -36,7 +35,7 @@
 
         #neural-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
 
-        /* TELA DE AUTENTICAÇÃO COM BLINDAGEM */
+        /* TELA DE AUTENTICAÇÃO */
         #auth-screen {
             position: fixed; inset: 0; z-index: 1000;
             display: flex; align-items: center; justify-content: center;
@@ -211,7 +210,7 @@
 
 <canvas id="neural-canvas"></canvas>
 
-<!-- TELA DE AUTENTICAÇÃO COM PROTOCOLO DE SEGURANÇA MILITAR -->
+<!-- TELA DE AUTENTICAÇÃO -->
 <div id="auth-screen">
     <div class="login-card">
         <div class="military-badge">AES-256 MILITARY GRADE ENCRYPTION ACTIVE</div>
@@ -279,7 +278,7 @@
             </div>
         </div>
 
-        <!-- PAINEL MASTER / CONVIDADOS INDIVIDUALIZADO -->
+        <!-- PAINEL EXCLUSIVO DO MASTER ADMIN & CONVIDADOS (INDIVIDUALIZADO) -->
         <div id="admin-wrapper">
             <div class="admin-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
@@ -378,25 +377,6 @@
 </div>
 
 <script>
-    /* ============================================================= */
-    /* PROTOCOLO DE SEGURANÇA MILITAR RIGOROSO ATIVO                 */
-    /* ============================================================= */
-    document.onkeydown = function(e) {
-        if (e.keyCode == 123 || 
-           (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || 
-           (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
-            alert("PROTOCOLO DE SEGURANÇA MILITAR ATIVO: Ação Bloqueada.");
-            return false;
-        }
-    };
-
-    setInterval(function() {
-        if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
-            document.body.innerHTML = "<div style='display:flex; justify-content:center; align-items:center; height:100vh; background:#000; color:#ff4d4d; font-family:sans-serif;'><h1>VIOLAÇÃO DE SEGURANÇA MILITAR DETECTADA</h1></div>";
-        }
-    }, 1000);
-
-    /* INTEGRAÇÃO NATIVA CLOUDFLARE WORKER */
     const CLOUD_API_URL = "https://alladin-eldin-ia.contatodroppfy.workers.dev";
     
     const StorageService = {
@@ -586,7 +566,7 @@
         if(!isUserAdmin) return;
         colaboradores = await StorageService.getColaboradores();
         
-        // Separação estricta por e-mail para evitar colaboradores fantasmas ou misturados
+        // Filtra estritamente apenas os colaboradores criados pelo gestor logado atual (Master vê tudo ou sua própria carteira)
         const myWorkers = (currentEmail === "master@xpartner.com") 
             ? colaboradores 
             : colaboradores.filter(c => c.creator === currentEmail);
@@ -618,6 +598,7 @@
             chartValores.push(bonusCalculado);
             chartHorasData.push(c.horasSemana || 0);
 
+            // Alerta e Botão de Bloqueio CLT (> 44h)
             const isOverClt = (c.horasSemana || 0) > 44;
             const cltAlert = isOverClt 
                 ? `<span style="color:var(--google-red); font-size:10px; font-weight:bold;">⚠️ ALERTA CLT: Acima de 44h (> 44h)</span>` 
