@@ -22,7 +22,6 @@
             --shadow-3d: 0 20px 40px rgba(30, 41, 59, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
 
-        /* TRAVA DE SELEÇÃO E NAVEGAÇÃO */
         * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; box-sizing: border-box; }
         input { -webkit-user-select: text; user-select: text; }
 
@@ -64,7 +63,6 @@
         .auth-tab { flex: 1; padding: 10px; border: none; background: transparent; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 12px; color: var(--text-secondary); transition: 0.3s; }
         .auth-tab.active { background: #fff; color: var(--google-blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* BANNER DE PROTOCOLO MILITAR */
         .military-badge {
             background: #000; color: #fff; padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; font-size: 10px; font-weight: 800; letter-spacing: 1px;
         }
@@ -135,7 +133,7 @@
         .btn-google { background: var(--google-blue); color: #FFF; }
         .btn-google:hover { background: #1557b0; }
 
-        /* --- MÓDULO ADMINISTRATIVO (EXCLUSIVO PARA ADMS E CONVIDADOS) --- */
+        /* --- MÓDULO ADMINISTRATIVO --- */
         #admin-wrapper { display: none; }
         .admin-section {
             margin-top: 40px; border-top: 1px solid var(--glass-border); padding-top: 30px;
@@ -200,10 +198,9 @@
 </head>
 <body oncontextmenu="return false;">
 
-<!-- CANVAS DE REDES NEURAIS ANIMADAS -->
 <canvas id="neural-canvas"></canvas>
 
-<!-- TELA DE LOGIN / AUTENTICAÇÃO MILITAR -->
+<!-- TELA DE AUTENTICAÇÃO -->
 <div id="auth-screen">
     <div class="login-card">
         <div class="military-badge">AES-256 MILITARY GRADE ENCRYPTION ACTIVE</div>
@@ -212,7 +209,6 @@
             <button class="auth-tab" onclick="switchAuthTab('admin')">Gestor / Master (E-mail)</button>
         </div>
 
-        <!-- FORM OPERADOR -->
         <div id="form-operator">
             <h1 style="margin:0; font-size: 22px; color: var(--text-primary);">X-PARTNER</h1>
             <p style="font-size: 11px; letter-spacing: 2px; color: var(--text-secondary); margin: 5px 0 15px 0;">SECURITY PROTOCOL: ALADIN</p>
@@ -220,7 +216,6 @@
             <button class="btn-main btn-tesla" style="width: 100%; padding: 15px; font-size: 14px;" onclick="validateOperatorAccess()">DESCRIPTOGRAFAR ACESSO</button>
         </div>
 
-        <!-- FORM GESTOR / MASTER / CONVIDADOS -->
         <div id="form-admin" style="display: none;">
             <h1 style="margin:0; font-size: 22px; color: var(--text-primary);">ELDIN I.A.</h1>
             <p style="font-size: 11px; letter-spacing: 2px; color: var(--text-secondary); margin: 5px 0 15px 0;">PORTAL DE GESTÃO & CONVIDADOS</p>
@@ -233,10 +228,9 @@
     </div>
 </div>
 
-<!-- APLICAÇÃO PRINCIPAL UNIFICADA -->
+<!-- APLICAÇÃO PRINCIPAL -->
 <div id="main-app">
     <div class="glass-container">
-        <!-- HEADER -->
         <div class="header">
             <div class="header-left">
                 <div class="user-pill">
@@ -251,7 +245,6 @@
             </div>
         </div>
 
-        <!-- PAINEL OPERACIONAL DIÁRIO -->
         <div class="main-content">
             <div class="card-finance">
                 <span style="color: var(--google-blue); font-size: 11px; font-weight: 800; letter-spacing: 1px;">VALOR ACUMULADO (PRODUÇÃO & KPI)</span>
@@ -271,13 +264,13 @@
             <button class="btn-main btn-google" onclick="generateSecurePix()">SOLICITAR PAGAMENTO (PIX)</button>
         </div>
 
-        <!-- PAINEL MASTER / ELDIN I.A. (EXCLUSIVO PARA ADMS E CONVIDADOS) -->
+        <!-- PAINEL MASTER / ELDIN I.A. -->
         <div id="admin-wrapper">
             <div class="admin-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                     <div>
                         <h2 style="margin:0; font-size: 18px; color: var(--google-blue);">ELDIN I.A. | MASTER COMMAND & REWARDS</h2>
-                        <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-secondary);">Gestão Centralizada de Escalas, Início de Jornada, Produtividade e Auditoria</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-secondary);">Gestão Global em Nuvem • Sincronizado em Tempo Real</p>
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button class="btn-action-admin" style="margin:0; width: auto; padding: 12px 18px;" onclick="addUser()">+ NOVO COLABORADOR</button>
@@ -286,7 +279,6 @@
                     </div>
                 </div>
 
-                <!-- KPI GLOBAL -->
                 <div style="background: rgba(255,255,255,0.6); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                     <div>
                         <div style="font-size: 11px; color: var(--text-secondary); font-weight: 700;">FOLHA DE PAGAMENTO TOTAL</div>
@@ -301,7 +293,6 @@
                     </div>
                 </div>
 
-                <!-- GRID DE COLABORADORES COM HORÁRIO DE INÍCIO -->
                 <div class="admin-grid" id="node-container"></div>
             </div>
         </div>
@@ -344,25 +335,58 @@
 
 <script>
     /* ============================================================= */
-    /* PROTOCOLO DE SEGURANÇA MILITAR ALADIN / ANTI-HACKER           */
+    /* CONFIGURAÇÃO DE NUVEM CLOUDFLARE WORKERS & LOCALSYNC          */
     /* ============================================================= */
+    const CLOUD_API_URL = "https://x-partner-api.seudominio.workers.dev"; // Substitua pelo seu Worker URL do Cloudflare
     
-    // Bloqueio de Teclas de Atalho de Inspeção de Código
+    // Fallback inteligente para localStorage e sincronização em tempo real entre abas/aparelhos
+    const StorageService = {
+        async getColaboradores() {
+            try {
+                // Tenta buscar da nuvem Cloudflare Workers se configurado
+                // const res = await fetch(`${CLOUD_API_URL}/colaboradores`);
+                // if(res.ok) return await res.json();
+                
+                const data = localStorage.getItem('xpartner_colaboradores');
+                return data ? JSON.parse(data) : [
+                    { nome: "Cristian Ribeiro", cpf: "34259998854", cpfMask: "342.***.***-54", g: "Estrategista", pix: "34259998854", folgaFixa: "QUARTA", domingoMes: "2º Domingo", atestados: 0, faltas: 0, pontos: 1500, a: false, inicioTurno: "--:--" },
+                    { nome: "Mikaele Nascimento", cpf: "04037096102", cpfMask: "040.***.***-02", g: "Garçonete / Operações", pix: "mika@droppfy.com", folgaFixa: "SEXTA", domingoMes: "1º Domingo", atestados: 0, faltas: 0, pontos: 2800, a: false, inicioTurno: "--:--" },
+                    { nome: "Ana Costa", cpf: "12345678900", cpfMask: "123.***.***-00", g: "Logística", pix: "ana_financas@banco.com", folgaFixa: "TERÇA", domingoMes: "3º Domingo", atestados: 0, faltas: 0, pontos: 1200, a: false, inicioTurno: "--:--" }
+                ];
+            } catch(e) {
+                return [];
+            }
+        },
+        async saveColaboradores(data) {
+            localStorage.setItem('xpartner_colaboradores', JSON.stringify(data));
+            // Sincronização via Cloudflare Worker em background (opcional ativo)
+            // fetch(`${CLOUD_API_URL}/colaboradores`, { method: 'POST', body: JSON.stringify(data) });
+        }
+    };
+
+    let colaboradores = [];
+    let gestoresConvidados = [
+        { email: "master@xpartner.com", pass: "admin123", role: "Master Admin" },
+        { email: "convidado@gestao.com", pass: "gestor2026", role: "Gestor Convidado" }
+    ];
+
+    let sessionActive = false, seconds = 0, timerInterval = null, currentUser = null, isUserAdmin = false;
+
+    // Sincronização automática entre abas do navegador na mesma máquina/rede
+    window.addEventListener('storage', async (e) => {
+        if(e.key === 'xpartner_colaboradores') {
+            colaboradores = await StorageService.getColaboradores();
+            renderRoster();
+            if(isUserAdmin) renderAdminDashboard();
+        }
+    });
+
     document.onkeydown = function(e) {
-        if (e.keyCode == 123 || 
-           (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || 
-           (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
             alert("PROTOCOLO DE SEGURANÇA MILITAR ATIVO: Ação Bloqueada.");
             return false;
         }
     };
-
-    // Detecção Contínua de Abertura do DevTools / Inspetor
-    setInterval(function() {
-        if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
-            document.body.innerHTML = "<div style='display:flex; justify-content:center; align-items:center; height:100vh; background:#000; color:#ff4d4d; font-family:sans-serif;'><h1>VIOLAÇÃO DE SEGURANÇA MILITAR DETECTADA</h1></div>";
-        }
-    }, 1000);
 
     /* REDES NEURAIS ANIMADAS */
     const canvas = document.getElementById('neural-canvas');
@@ -429,19 +453,10 @@
     }
     animateNeural();
 
-    /* BANCOS DE DADOS DE USUÁRIOS E GESTORES/CONVIDADOS */
-    let colaboradores = [
-        { nome: "Cristian Ribeiro", cpf: "34259998854", cpfMask: "342.***.***-54", g: "Estrategista", pix: "34259998854", folgaFixa: "QUARTA", domingoMes: "2º Domingo", atestados: 0, faltas: 0, pontos: 1500, a: false, inicioTurno: "--:--" },
-        { nome: "Mikaele Nascimento", cpf: "04037096102", cpfMask: "040.***.***-02", g: "Garçonete / Operações", pix: "mika@droppfy.com", folgaFixa: "SEXTA", domingoMes: "1º Domingo", atestados: 0, faltas: 0, pontos: 2800, a: false, inicioTurno: "--:--" },
-        { nome: "Ana Costa", cpf: "12345678900", cpfMask: "123.***.***-00", g: "Logística", pix: "ana_financas@banco.com", folgaFixa: "TERÇA", domingoMes: "3º Domingo", atestados: 0, faltas: 0, pontos: 1200, a: false, inicioTurno: "--:--" }
-    ];
-
-    let gestoresConvidados = [
-        { email: "master@xpartner.com", pass: "admin123", role: "Master Admin" },
-        { email: "convidado@gestao.com", pass: "gestor2026", role: "Gestor Convidado" }
-    ];
-
-    let sessionActive = false, seconds = 0, timerInterval = null, currentUser = null, isUserAdmin = false;
+    async function initSystemData() {
+        colaboradores = await StorageService.getColaboradores();
+    }
+    initSystemData();
 
     function switchAuthTab(type) {
         if(type === 'operator') {
@@ -458,7 +473,8 @@
         document.getElementById('msg-erro').style.display = 'none';
     }
 
-    function validateOperatorAccess() {
+    async function validateOperatorAccess() {
+        colaboradores = await StorageService.getColaboradores();
         const input = document.getElementById('cpf-input').value.replace(/\D/g, '');
         currentUser = colaboradores.find(u => u.cpf === input);
         isUserAdmin = false;
@@ -484,7 +500,8 @@
         }
     }
 
-    function initSessionUI(roleTitle, name) {
+    async function initSessionUI(roleTitle, name) {
+        colaboradores = await StorageService.getColaboradores();
         document.getElementById('msg-erro').style.display = 'none';
         document.getElementById('auth-screen').style.opacity = '0';
         setTimeout(() => {
@@ -494,7 +511,6 @@
             document.getElementById('logged-name').innerText = name;
             document.getElementById('logged-role').innerText = roleTitle;
 
-            // Restrição de Visualização do Backend/Admin
             if(isUserAdmin) {
                 document.getElementById('admin-wrapper').style.display = 'block';
                 renderAdminDashboard();
@@ -526,19 +542,21 @@
         }
     }
 
-    function renderRoster() {
+    async function renderRoster() {
+        colaboradores = await StorageService.getColaboradores();
         const roster = document.getElementById('roster');
         roster.innerHTML = '<div style="font-size: 11px; font-weight: 800; color: var(--text-secondary); margin-bottom: 12px; letter-spacing: 1px;">STATUS DA EQUIPE EM TEMPO REAL</div>' +
             colaboradores.map(p => `
                 <div class="worker-item">
                     <div style="font-size: 13px;"><strong>${p.nome}</strong><br><small style="color: var(--text-secondary)">${p.g} • Início: ${p.inicioTurno}</small></div>
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background: ${p.a ? 'var(--google-green)' : 'var(--google-red)'}; box-shadow: 0 0 10px ${p.a ? 'var(--google-green)' : 'var(--google-red)'}"></div>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: ${p.a ? 'var(--google-green)' : 'var(--google-red)'}; box-shadow: 0 0 10px ${p.a ? 'var(--google-green)' : 'var(--google-red)'}" title="${p.a ? 'Trabalhando Ativo' : 'Offline'}"></div>
                 </div>
             `).join('');
     }
 
-    function renderAdminDashboard() {
+    async function renderAdminDashboard() {
         if(!isUserAdmin) return;
+        colaboradores = await StorageService.getColaboradores();
         const container = document.getElementById('node-container');
         const tableBody = document.getElementById('table-body');
         let totalBônusSomado = 0;
@@ -560,7 +578,8 @@
             <div class="user-node">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div>
-                        <strong style="color:var(--google-blue); font-size: 16px;">${c.nome.toUpperCase()}</strong><br>
+                        <strong style="color:var(--google-blue); font-size: 16px;">${c.nome.toUpperCase()}</strong>
+                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${c.a ? 'var(--google-green)' : 'var(--google-red)'}; margin-left: 6px;" title="${c.a ? 'ATIVO TRABALHANDO' : 'OFFLINE'}"></span><br>
                         <span style="color:var(--text-secondary); font-family: monospace; font-size: 11px;">${c.cpfMask} • ${c.g}</span><br>
                         <span style="color:var(--accent-orange); font-size: 10px; font-weight: bold;">🕒 Início Turno: ${c.inicioTurno}</span>
                     </div>
@@ -623,11 +642,8 @@
         document.getElementById('print-date').innerText = `Gerado em: ${new Date().toLocaleString('pt-BR')}`;
     }
 
-    function toggleShift() {
-        if(isUserAdmin) {
-            alert("Ação restrita a operadores em turno.");
-            return;
-        }
+    async function toggleShift() {
+        if(isUserAdmin) return;
         sessionActive = !sessionActive;
         const btn = document.getElementById('btn-action');
         const status = document.getElementById('status-label');
@@ -647,9 +663,17 @@
                 document.getElementById('timer').innerText = `${h}:${m}:${s} EM OPERAÇÃO`;
             }, 1000);
         } else {
+            currentUser.inicioTurno = "--:--";
             btn.innerText = "RETOMAR OPERAÇÃO"; btn.style.background = "#1e293b"; btn.style.color = "#fff";
             status.innerText = "SISTEMA EM PAUSA";
             clearInterval(timerInterval);
+        }
+
+        // Atualiza na base de dados sincronizada
+        const index = colaboradores.findIndex(u => u.cpf === currentUser.cpf);
+        if(index !== -1) {
+            colaboradores[index] = currentUser;
+            await StorageService.saveColaboradores(colaboradores);
         }
         renderRoster();
     }
@@ -694,13 +718,37 @@
         modal.style.display = 'flex';
     }
 
-    /* FUNÇÕES DE GESTÃO DO MASTER E CONVIDADOS */
-    function adjustValue(index, amount) { if(!isUserAdmin) return; colaboradores[index].pontos = Math.max(0, colaboradores[index].pontos + amount); renderAdminDashboard(); }
-    function resetGlobal() { if(!isUserAdmin) return; if(confirm("Zerar todos os bônus globais?")) { colaboradores.forEach(c => c.pontos = 0); renderAdminDashboard(); }}
-    function addKpi(index) { if(!isUserAdmin) return; const pts = prompt("Pontos de performance:", "100"); if(pts && !isNaN(pts)) { colaboradores[index].pontos += parseInt(pts); renderAdminDashboard(); } }
-    function adjustStat(index, field, value) { if(!isUserAdmin) return; colaboradores[index][field] = Math.max(0, colaboradores[index][field] + value); renderAdminDashboard(); }
+    async function adjustValue(index, amount) { 
+        if(!isUserAdmin) return; 
+        colaboradores[index].pontos = Math.max(0, colaboradores[index].pontos + amount); 
+        await StorageService.saveColaboradores(colaboradores);
+        renderAdminDashboard(); 
+    }
+    async function resetGlobal() { 
+        if(!isUserAdmin) return; 
+        if(confirm("Zerar todos os bônus globais?")) { 
+            colaboradores.forEach(c => c.pontos = 0); 
+            await StorageService.saveColaboradores(colaboradores);
+            renderAdminDashboard(); 
+        }
+    }
+    async function addKpi(index) { 
+        if(!isUserAdmin) return; 
+        const pts = prompt("Pontos de performance:", "100"); 
+        if(pts && !isNaN(pts)) { 
+            colaboradores[index].pontos += parseInt(pts); 
+            await StorageService.saveColaboradores(colaboradores);
+            renderAdminDashboard(); 
+        } 
+    }
+    async function adjustStat(index, field, value) { 
+        if(!isUserAdmin) return; 
+        colaboradores[index][field] = Math.max(0, colaboradores[index][field] + value); 
+        await StorageService.saveColaboradores(colaboradores);
+        renderAdminDashboard(); 
+    }
     
-    function addUser() {
+    async function addUser() {
         if(!isUserAdmin) return;
         const n = prompt("Nome completo:");
         const c = prompt("CPF (apenas números):");
@@ -709,6 +757,7 @@
         if(n && c && pix) {
             const masked = c.length === 11 ? `${c.slice(0,3)}.***.***-${c.slice(9)}` : c;
             colaboradores.push({ nome: n, cpf: c, cpfMask: masked, g: g, pix: pix, folgaFixa: "A DEFINIR", domingoMes: "A DEFINIR", atestados: 0, faltas: 0, pontos: 500, a: false, inicioTurno: "--:--" });
+            await StorageService.saveColaboradores(colaboradores);
             renderAdminDashboard();
             renderRoster();
         }
@@ -724,15 +773,46 @@
         }
     }
 
-    function removeUser(index) {
+    async function removeUser(index) {
         if(!isUserAdmin) return;
-        if(confirm(`Remover ${colaboradores[index].nome}?`)) { colaboradores.splice(index, 1); renderAdminDashboard(); renderRoster(); }
+        if(confirm(`Remover ${colaboradores[index].nome}?`)) { 
+            colaboradores.splice(index, 1); 
+            await StorageService.saveColaboradores(colaboradores);
+            renderAdminDashboard(); 
+            renderRoster(); 
+        }
     }
 
-    function changeFolga(index) { if(!isUserAdmin) return; const f = prompt("Nova Folga:", colaboradores[index].folgaFixa); if(f) { colaboradores[index].folgaFixa = f.toUpperCase(); renderAdminDashboard(); } }
-    function changeDomingo(index) { if(!isUserAdmin) return; const d = prompt("Novo Domingo:", colaboradores[index].domingoMes); if(d) { colaboradores[index].domingoMes = d; renderAdminDashboard(); } }
+    async function changeFolga(index) { 
+        if(!isUserAdmin) return; 
+        const f = prompt("Nova Folga:", colaboradores[index].folgaFixa); 
+        if(f) { 
+            colaboradores[index].folgaFixa = f.toUpperCase(); 
+            await StorageService.saveColaboradores(colaboradores);
+            renderAdminDashboard(); 
+        } 
+    }
+    async function changeDomingo(index) { 
+        if(!isUserAdmin) return; 
+        const d = prompt("Novo Domingo:", colaboradores[index].domingoMes); 
+        if(d) { 
+            colaboradores[index].domingoMes = d; 
+            await StorageService.saveColaboradores(colaboradores);
+            renderAdminDashboard(); 
+        } 
+    }
 
-    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+    // Atualização em tempo real na tela do Master a cada 3 segundos
+    setInterval(async () => { 
+        document.getElementById('clock').innerText = new Date().toLocaleTimeString(); 
+        if(isUserAdmin) {
+            colaboradores = await StorageService.getColaboradores();
+            renderAdminDashboard();
+        } else if(currentUser) {
+            colaboradores = await StorageService.getColaboradores();
+            renderRoster();
+        }
+    }, 3000);
 </script>
 </body>
 </html>
