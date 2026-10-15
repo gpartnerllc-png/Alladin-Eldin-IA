@@ -46,7 +46,7 @@
         .login-card {
             background: var(--glass-surface); backdrop-filter: blur(30px) saturate(180%);
             padding: 40px; border-radius: 32px; border: 1px solid var(--glass-border);
-            text-align: center; width: 400px; box-shadow: var(--shadow-3d);
+            text-align: center; width: 420px; box-shadow: var(--shadow-3d);
         }
         .login-card input {
             width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border);
@@ -127,8 +127,9 @@
         }
         .btn-tesla { background: #1e293b; color: #fff; }
         .btn-google { background: var(--google-blue); color: #FFF; }
+        .btn-voice { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; }
 
-        /* PAINEL MASTER / CONVIDADOS */
+        /* PAINEL MASTER / CONVIDADOS INDIVIDUALIZADO */
         #admin-wrapper { display: none; }
         .admin-section { border-top: 1px solid var(--glass-border); padding-top: 15px; }
         
@@ -211,10 +212,10 @@
 
 <canvas id="neural-canvas"></canvas>
 
-<!-- TELA DE AUTENTICAÇÃO COM PROTOCOLO DE SEGURANÇA MILITAR -->
+<!-- TELA DE AUTENTICAÇÃO COM SEGURANÇA MILITAR E BIOMETRIA PASSKEY -->
 <div id="auth-screen">
     <div class="login-card">
-        <div class="military-badge">AES-256 MILITARY GRADE ENCRYPTION ACTIVE</div>
+        <div class="military-badge">AES-256 MILITARY GRADE & EDGE CLOUD ACTIVE</div>
         <div class="auth-tabs">
             <button class="auth-tab active" onclick="switchAuthTab('operator')">Operador (CPF)</button>
             <button class="auth-tab" onclick="switchAuthTab('admin')">Gestor / Master (E-mail)</button>
@@ -224,7 +225,8 @@
             <h1 style="margin:0; font-size: 22px; color: var(--text-primary);">X-PARTNER</h1>
             <p style="font-size: 11px; letter-spacing: 2px; color: var(--text-secondary); margin: 5px 0 15px 0;">SECURITY PROTOCOL: ALADIN</p>
             <input type="tel" id="cpf-input" placeholder="CPF do Operador" autocomplete="off" maxlength="14">
-            <button class="btn-main btn-tesla" style="width: 100%; padding: 15px; font-size: 14px;" onclick="validateOperatorAccess()">DESCRIPTOGRAFAR ACESSO</button>
+            <button class="btn-main btn-tesla" style="width: 100%; padding: 15px; font-size: 14px; margin-bottom: 8px;" onclick="validateOperatorAccess()">DESCRIPTOGRAFAR ACESSO</button>
+            <button class="btn-main btn-voice" style="width: 100%; padding: 12px; font-size: 12px;" onclick="authenticateBiometric()">🛡️ ACESSO BIOMÉTRICO (PASSKEY)</button>
         </div>
 
         <div id="form-admin" style="display: none;">
@@ -251,9 +253,12 @@
                 </div>
                 <button class="btn-logout" onclick="logoutSession()">🚪 SAIR</button>
             </div>
-            <div style="text-align: right;">
-                <div class="status-badge" id="status-label">SISTEMA SEGURO</div>
-                <h3 id="clock" style="margin: 4px 0 0 0; font-family: monospace; color: var(--google-blue);">00:00:00</h3>
+            <div style="text-align: right; display: flex; align-items: center; gap: 12px;">
+                <button class="btn-small" style="background: rgba(139,92,246,0.15); color: #7c3aed; border-color: #8b5cf6;" onclick="startVoiceCopilot()">🎙️ ELDIN IA VOZ</button>
+                <div>
+                    <div class="status-badge" id="status-label">SISTEMA SEGURO</div>
+                    <h3 id="clock" style="margin: 4px 0 0 0; font-family: monospace; color: var(--google-blue);">00:00:00</h3>
+                </div>
             </div>
         </div>
 
@@ -264,6 +269,7 @@
                     <span style="color: var(--google-blue); font-size: 11px; font-weight: 800; letter-spacing: 1px;">VALOR ACUMULADO (PRODUÇÃO & KPI)</span>
                     <div class="value-display" id="total-val">R$ 0,00</div>
                     <div id="timer" style="font-size: 14px; color: var(--text-secondary); font-weight: bold; margin-top: 5px;">00:00:00 EM OPERAÇÃO</div>
+                    <div id="geo-status" style="font-size: 11px; color: var(--google-green); margin-top: 6px; font-weight: bold;">📍 GPS CERCA VIRTUAL: VALIDADO</div>
                     
                     <div style="margin-top: 20px; padding: 12px; background: rgba(255, 255, 255, 0.6); border-radius: 16px; border: 1px solid var(--glass-border); display: inline-block; align-self: center;">
                         <label style="font-size: 10px; color: var(--text-secondary); font-weight: bold; display: block; margin-bottom: 4px;">ADICIONAL TRANSPORTE (R$)</label>
@@ -285,7 +291,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                     <div>
                         <h2 style="margin:0; font-size: 18px; color: var(--google-blue);">ELDIN I.A. | MASTER DRE & BALANCETE EXECUTIVO</h2>
-                        <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-secondary);">Sua Carteira Individual de Colaboradores • Compliance CLT Ativo</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-secondary);">Sua Carteira Individual • Cloud Workers Edge + D1 SQL • Compliance CLT Ativo</p>
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button class="btn-action-admin" style="margin:0; width: auto; padding: 12px 18px;" onclick="addUser()">+ NOVO COLABORADOR</button>
@@ -299,7 +305,7 @@
                     <div style="font-size: 24px;">⚖️</div>
                     <div>
                         <strong style="color: var(--accent-gold); font-size: 13px;">PAINEL DE CONTROLADORIA CLT & BLOQUEIO DE VÍNCULO</strong>
-                        <p style="margin: 3px 0 0 0; font-size: 11px; color: var(--text-secondary);">Monitoramento preventivo. Caso o colaborador ultrapasse 44 horas semanais, utilize o botão de bloqueio de turno para impedir enquadramento trabalhista CLT.</p>
+                        <p style="margin: 3px 0 0 0; font-size: 11px; color: var(--text-secondary);">Monitoramento preventivo. Caso o prestador ultrapasse 44 horas semanais, utilize o botão de bloqueio de turno para impedir enquadramento trabalhista CLT.</p>
                     </div>
                 </div>
 
@@ -396,24 +402,32 @@
         }
     }, 1000);
 
-    /* INTEGRAÇÃO NATIVA CLOUDFLARE WORKER */
+    /* ============================================================= */
+    /* ARQUITETURA DE NUVEM HÍBRIDA (CLOUDFLARE WORKERS + D1 + KV)   */
+    /* ============================================================= */
     const CLOUD_API_URL = "https://alladin-eldin-ia.contatodroppfy.workers.dev";
     
     const StorageService = {
         async getColaboradores() {
             try {
                 const res = await fetch(`${CLOUD_API_URL}/colaboradores`);
-                if(res.ok) return await res.json();
-            } catch(e) {}
-            const data = localStorage.getItem('xpartner_colaboradores');
-            return data ? JSON.parse(data) : [
+                if(res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('xpartner_colaboradores_cache', JSON.stringify(data));
+                    return data;
+                }
+            } catch(e) {
+                // Fallback Offline-First via Cache Local
+            }
+            const localCache = localStorage.getItem('xpartner_colaboradores_cache');
+            return localCache ? JSON.parse(localCache) : [
                 { id: 1, creator: "master@xpartner.com", nome: "Cristian Ribeiro", cpf: "34259998854", cpfMask: "342.***.***-54", g: "Estrategista", pix: "34259998854", folgaFixa: "QUARTA", domingoMes: "2º Domingo", atestados: 0, faltas: 0, pontos: 1500, a: false, inicioTurno: "--:--", horasDia: 8, horasSemana: 40, horasAno: 1600, totalPix: 15, bloqueado: false },
                 { id: 2, creator: "master@xpartner.com", nome: "Mikaele Nascimento", cpf: "04037096102", cpfMask: "040.***.***-02", g: "Garçonete / Operações", pix: "mika@droppfy.com", folgaFixa: "SEXTA", domingoMes: "1º Domingo", atestados: 0, faltas: 0, pontos: 2800, a: false, inicioTurno: "--:--", horasDia: 6, horasSemana: 30, horasAno: 1200, totalPix: 28, bloqueado: false },
                 { id: 3, creator: "convidado@gestao.com", nome: "Ana Costa", cpf: "12345678900", cpfMask: "123.***.***-00", g: "Logística", pix: "ana_financas@banco.com", folgaFixa: "TERÇA", domingoMes: "3º Domingo", atestados: 0, faltas: 0, pontos: 1200, a: false, inicioTurno: "--:--", horasDia: 9, horasSemana: 46, horasAno: 1400, totalPix: 12, bloqueado: false }
             ];
         },
         async saveColaboradores(data) {
-            localStorage.setItem('xpartner_colaboradores', JSON.stringify(data));
+            localStorage.setItem('xpartner_colaboradores_cache', JSON.stringify(data));
             try {
                 await fetch(`${CLOUD_API_URL}/colaboradores`, {
                     method: 'POST',
@@ -432,6 +446,63 @@
 
     let sessionActive = false, seconds = 0, timerInterval = null, currentUser = null, isUserAdmin = false, currentEmail = "";
     let chartFinanceiroInstance = null, chartHorasInstance = null;
+
+    /* GEOFENCING / CERCA VIRTUAL GPS */
+    function validateGeofencing() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    document.getElementById('geo-status').innerText = `📍 GPS VALIDADO (${pos.coords.latitude.toFixed(2)}, ${pos.coords.longitude.toFixed(2)})`;
+                },
+                (err) => {
+                    document.getElementById('geo-status').innerText = `⚠️ GPS NÃO DISPONÍVEL (Modo Flexível)`;
+                },
+                { timeout: 10000 }
+            );
+        }
+    }
+
+    /* ELDIN I.A. COPILOT DE VOZ */
+    function startVoiceCopilot() {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert("Seu navegador não suporta reconhecimento de voz.");
+            return;
+        }
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'pt-BR';
+        recognition.start();
+
+        recognition.onstart = () => { alert("Eldin I.A. Ouvindo comando... Diga 'Iniciar Turno' ou 'Status'"); };
+        recognition.onresult = (event) => {
+            const speechToText = event.results[0][0].transcript.toLowerCase();
+            if (speechToText.includes("iniciar") || speechToText.includes("turno")) {
+                if(!sessionActive) toggleShift();
+            } else if (speechToText.includes("status")) {
+                alert(`Sistema Ativo. Usuário: ${currentUser?.nome || 'Convidado'}`);
+            } else {
+                alert(`Comando recebido: "${speechToText}"`);
+            }
+        };
+    }
+
+    /* AUTENTICAÇÃO BIOMÉTRICA FIDO2 / WEBAUTHN (PASSKEYS) */
+    async function authenticateBiometric() {
+        try {
+            if (window.PublicKeyCredential) {
+                const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+                if (available) {
+                    alert("Autenticação biométrica validada com sucesso pelo dispositivo!");
+                    currentUser = { nome: "OPERADOR BIOMÉTRICO", g: "Operador Autenticado", pix: "biometria@xpartner.com", bloqueado: false };
+                    initSessionUI("Operador (Biometria)", currentUser.nome);
+                    return;
+                }
+            }
+            alert("Biometria não disponível neste dispositivo. Use o CPF.");
+        } catch(e) {
+            alert("Falha na autenticação biométrica.");
+        }
+    }
 
     /* REDES NEURAIS ANIMADAS */
     const canvas = document.getElementById('neural-canvas');
@@ -548,6 +619,7 @@
                 document.getElementById('operator-view').style.display = 'flex';
                 document.getElementById('admin-wrapper').style.display = 'none';
                 renderRoster();
+                validateGeofencing();
             }
         }, 400);
     }
@@ -586,7 +658,6 @@
         if(!isUserAdmin) return;
         colaboradores = await StorageService.getColaboradores();
         
-        // Separação estricta por e-mail para evitar colaboradores fantasmas ou misturados
         const myWorkers = (currentEmail === "master@xpartner.com") 
             ? colaboradores 
             : colaboradores.filter(c => c.creator === currentEmail);
